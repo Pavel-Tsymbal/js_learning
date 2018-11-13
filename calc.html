@@ -141,6 +141,9 @@
     }
 
     function result() {
+        if (isNew) {
+            return false;
+        }
         var secondValue = input.value;
         var result = '';
         switch (operationSymbol) {
