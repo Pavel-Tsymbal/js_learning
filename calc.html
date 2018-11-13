@@ -1,0 +1,178 @@
+<html>
+    <header>
+        <title>Calc</title>
+        <style>
+            .main {
+                display: flex;
+                justify-content: center;               
+            }
+            .calc {
+                display: flex;
+                justify-content: center;
+                flex-wrap: wrap;
+                width: 400px;
+                height: 400px;
+                border: 1px solid gainsboro;
+                padding: 15px;
+            }
+            .result {
+                height: 50px;
+                display: flex;
+            }
+            .result input {
+                height: 50px;
+                width: 250px;
+                font-size: 20px;
+                padding: 5px;
+            }
+            .button {
+                width: 40px;
+                height: 40px;
+                margin: 10px;
+            }
+            .button-operation {
+                width: 40px;
+                height: 40px;
+                margin: 10px;
+            }
+            .button-clean {
+                width: 50px;
+                margin-left: 5px;
+            }
+            .numbers {
+                padding: 10px;
+                display: flex;
+                justify-content: space-evenly;
+                flex-wrap: wrap;
+                width: 200px;
+                height: 300px;
+            }
+            .operations {
+                display: flex;
+                justify-content: center;
+                flex-wrap: wrap;
+                width: 100px;
+                height: 320px;
+            }
+            .numbers-operations {
+                display: flex;
+            }
+            .operations-log {
+                width: 200px;
+            }
+            .log-input {
+                width: 200px;
+                height: 430px;
+                resize: none;
+            }
+        </style>
+    </header>
+
+    <body>
+    <div class="main">
+        <div class="calc">
+            <div class="result">
+              <input type="text" id="input" readonly value="0">
+            </div>
+            <div class="numbers-operations">
+                <div class="numbers">
+                    <div><button  class="button"  onclick="getButtonValue('1')">1</button></div>
+                    <div><button  class="button"  onclick="getButtonValue('2')">2</button></div>
+                    <div><button  class="button"  onclick="getButtonValue('3')">3</button></div>
+                    <div><button  class="button"  onclick="getButtonValue('4')">4</button></div>
+                    <div><button  class="button"  onclick="getButtonValue('5')">5</button></div>
+                    <div><button  class="button"  onclick="getButtonValue('6')">6</button></div>
+                    <div><button  class="button"  onclick="getButtonValue('7')">7</button></div>
+                    <div><button  class="button"  onclick="getButtonValue('8')">8</button></div>
+                    <div><button  class="button"  onclick="getButtonValue('9')">9</button></div>
+                    <div><button class="button" onclick="point()">.</button></div>
+                    <div><button  class="button" value="0" onclick="getButtonValue('0')">0</button></div>
+                    <div><button id="button-clean" class=" button button-clean" onclick="clearInput()">Clean</button></div>
+                </div>
+                <div class="operations">
+                        <div><button class="button-operation" onclick="result()">=</button></div>
+                        <div><button class="button-operation" onclick="operationFunc('+')">+</button></div>
+                        <div><button class="button-operation" onclick="operationFunc('-')">-</button></div>
+                        <div><button class="button-operation" onclick="operationFunc('*')">*</button></div>
+                        <div><button class="button-operation" onclick="operationFunc('/')">/</button></div>
+                </div>
+            </div>
+        </div>
+        <div class="operations-log">
+            <textarea class="log-input" id="log" type="text" disabled></textarea>
+        </div>
+    </div>
+    </body>
+</html>
+
+<script>
+    var firstValue;
+    var operationSymbol;
+    var logCount = 1;
+    var input = document.querySelector("#input");
+    var isNew = false;
+
+    function getButtonValue(buttonValue) {
+        var value = input.value;
+
+        if (isNew) {
+            value = '0';
+            isNew = false;
+        }
+
+        value = (value === '0')
+         ? buttonValue
+         : value + buttonValue;
+
+        input.value = value;
+    }
+
+    function clearInput() {
+        var value = '0';
+        firstValue = '';
+        operationSymbol = '';
+        input.value = value;
+    }
+
+    function operationFunc(oper) {
+        firstValue = input.value;
+        input.value = '0';
+        operationSymbol = oper;
+    }
+
+    function result() {
+        var secondValue = input.value;
+        var result = '';
+        switch (operationSymbol) {
+            case '+':  result += +firstValue + +secondValue;
+            break;
+            case '-':  result += +firstValue - +secondValue;
+            break;
+            case '*':  result += +firstValue * +secondValue;
+            break;
+            case '/':  result += +firstValue / +secondValue;
+            break;
+        }
+        input.value = result;
+
+        log(firstValue,secondValue,result);
+        isNew = true;
+    }
+    
+    function point() {
+        var value = input.value;
+        if (!(value.indexOf('.') !== -1)) {
+            value += '.';
+        }
+        input.value = value;
+    }
+
+    function log(firstValue,secondValue,result) {
+        var logString = logCount + ') ' + firstValue + ' ' + operationSymbol + ' ' + secondValue + ' = ' + result + '\n';
+        var log = document.querySelector("#log");
+        var logValue = log.value;
+        logValue += logString;
+        log.value = logValue;
+        logCount++;
+    }
+</script>
